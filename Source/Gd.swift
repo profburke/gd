@@ -50,10 +50,7 @@ public class Gd {
         return (bytes, size)
     }
 
-    public func randomColor() -> Int32 {
-        let r = Int.random(min: 0, max: 255)
-        let g = Int.random(min: 0, max: 255)
-        let b = Int.random(min: 0, max: 255)
+    public func allocateColor(r: Int32, g: Int32, b: Int32) -> Int32 {
         let color = gdImageColorAllocate(im, r, g, b)
         return color
     }
