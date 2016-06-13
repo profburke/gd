@@ -41,6 +41,10 @@ public class Gd {
         gdImageString(im, gdFontGetMediumBold(), x, y, cPtr, color)
     }
 
+    public func fillRectangle(x0: Int32, y0: Int32, x1: Int32, y1: Int32, color: Int32) {
+        gdImageFilledRectangle(im, x0, y0, x1, y1, color)
+    }
+    
     public func pngPtr() -> ([Byte], Int32) {
         var size: Int32 = 0
         let p = gdImagePngPtr(im, &size)
