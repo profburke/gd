@@ -6,13 +6,13 @@ public typealias Byte = UInt8
 
 public class Gd {
 
-    let width: Int32
-    let height: Int32
+    public let width: Int32
+    public let height: Int32
     let im: gdImagePtr
 
-    let black: Int32
-    let red: Int32
-    let yellow: Int32
+    public let black: Int32
+    public let red: Int32
+    public let yellow: Int32
 
     public var lineThickness: Int32 = 1 {
         didSet {
