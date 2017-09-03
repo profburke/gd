@@ -27,6 +27,7 @@ public class Gd {
     // Low priority TODO: include (or create separate module for ESR's tng (or what's it called) module
     // TODO: init from from image files
 
+    // FIXME: this segfaults
     public init(image: Gd) {
         size = image.size
         gdImage = gdImageClone(image.gdImage)
@@ -41,7 +42,7 @@ public class Gd {
         gdImageDestroy(gdImage)
     }
 
-    subscript(point: Point) -> Int32 {
+    public subscript(point: Point) -> Int32 {
         get {
             return gdImageGetPixel(gdImage, point.x, point.y)
         }
@@ -118,6 +119,8 @@ public class Gd {
 
     // TODO: polygon functions
 
+    // TODO: fill functions
+    
     // TODO: this is a little slapdash...
     public func write(to filename: String) -> Int {
         return Int(gdImageFile(gdImage, filename))
