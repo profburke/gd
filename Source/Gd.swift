@@ -119,7 +119,7 @@ public class Gd {
     // TODO: polygon functions
 
     // TODO: this is a little slapdash...
-    func write(to filename: String) -> Int {
+    public func write(to filename: String) -> Int {
         return Int(gdImageFile(gdImage, filename))
     }
     
