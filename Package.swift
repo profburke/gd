@@ -3,6 +3,6 @@ import PackageDescription
 let package = Package(
     name: "Gd",
     dependencies: [
-		.Package(url: "https://bitbucket.org/bluedino/cgd.git", majorVersion: 1, minor: 1)
+		.Package(url: "https://github.com/profburke/cgd.git", majorVersion: 1)
         ]
     )
