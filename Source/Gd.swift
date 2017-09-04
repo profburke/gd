@@ -103,13 +103,13 @@ public class Gd {
         case .giant:
             fontPtr = gdFontGetGiant
         case .large:
-            fontPtr = gdFontGetGiant
+            fontPtr = gdFontGetLarge
         case .mediumBold:
-            fontPtr = gdFontGetGiant
+            fontPtr = gdFontGetMediumBold
         case .small:
-            fontPtr = gdFontGetGiant
+            fontPtr = gdFontGetSmall
         case .tiny:
-            fontPtr = gdFontGetGiant
+            fontPtr = gdFontGetTiny
         }
             
         gdImageString(gdImage, fontPtr(), upperLeft.x, upperLeft.y, cPtr, color)
