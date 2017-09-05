@@ -106,7 +106,7 @@ public class Gd {
         }
     }
     
-    public func string(text: String, upperLeft: Point, color: Int32, font: GdRasterFont) {
+    public func string(text: String, upperLeft: Point, color: Int32, font: GdRasterFont, up: Bool = false) {
         let cPtr = UnsafeMutablePointer<UInt8>(mutating: text)
         let fontPtr: ()->gdFontPtr!
         switch font {
@@ -121,20 +121,24 @@ public class Gd {
         case .tiny:
             fontPtr = gdFontGetTiny
         }
-            
-        gdImageString(gdImage, fontPtr(), upperLeft.x, upperLeft.y, cPtr, color)
+
+        if up {
+            gdImageStringUp(gdImage, fontPtr(), upperLeft.x, upperLeft.y, cPtr, color)
+        } else {
+            gdImageString(gdImage, fontPtr(), upperLeft.x, upperLeft.y, cPtr, color)
+        }
     }
 
     // TODO: string "up" function, replace (or add) true type functions?
 
     // TODO: polygon functions
 
-    public func fill(with color: Int32, from: Point) {
-        gdImageFill(gdImage, from.x, from.y, color)
-    }
-
-    public func borderFill(with color: Int32, from: Point, to: Int32) {
-        gdImageFillToBorder(gdImage, from.x, from.y, to, color)
+    public func fill(with color: Int32, from: Point, borderedBy: Int32? = nil) {
+        if let borderColor = borderedBy {
+            gdImageFillToBorder(gdImage, from.x, from.y, borderColor, color)
+        } else {
+            gdImageFill(gdImage, from.x, from.y, color)
+        }
     }
     
     // TODO: this is a little slapdash...
