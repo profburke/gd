@@ -76,6 +76,11 @@ public class Gd {
         }
     }
 
+    public func square(upperLeft: Point, side: Int, color: Int32, mode: DrawingMode) {
+        let lowerRight = Point(x: Int(upperLeft.x) + side, y: Int(upperLeft.y) + side)
+        rectangle(upperLeft: upperLeft, lowerRight: lowerRight, color: color, mode: mode)
+    }
+    
     public func ellipse(center: Point, size: Size, color: Int32, mode: DrawingMode) {
         switch mode {
         case .stroke:
@@ -87,6 +92,11 @@ public class Gd {
         }
     }
 
+    public func circle(center: Point, radius: Int, color: Int32, mode: DrawingMode) {
+        let size = Size(width: radius, height: radius)
+        ellipse(center: center, size: size, color: color, mode: mode)
+    }
+    
     // TODO: replace gdImageDashedLine with use of gdSetStyle
     public func line(from: Point, to: Point, color: Int32, dashed: Bool = false) {
         if dashed {
@@ -119,7 +129,9 @@ public class Gd {
 
     // TODO: polygon functions
 
-    // TODO: fill functions
+    public func fill(with color: Int32, from: Point) {
+        gdImageFill(gdImage, from.x, from.y, color)
+    }
     
     // TODO: this is a little slapdash...
     public func write(to filename: String) -> Int {
