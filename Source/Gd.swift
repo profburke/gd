@@ -24,10 +24,8 @@ public class Gd {
         }
     }
 
-    // Low priority TODO: include (or create separate module for ESR's tng (or what's it called) module
-    // TODO: init from from image files
+    // TODO: (low priority) handle ESR's sng format
 
-    // FIXME: this segfaults
     public init(image: Gd) {
         size = image.size
         gdImage = gdImageClone(image.gdImage)
@@ -38,6 +36,31 @@ public class Gd {
         gdImage = gdImageCreate(size.width, size.height)
     }
 
+    public init?(filename: String) {
+        let infile = fopen(filename, "rb")
+        defer { fclose(infile) }
+
+        guard infile != nil else { return nil }
+
+        let image: gdImagePtr?
+
+        let filename = filename.lowercased()
+        if filename.hasSuffix(".jpg") || filename.hasSuffix(".jpeg") {
+            image = gdImageCreateFromJpeg(infile)
+        } else if filename.hasSuffix(".png") {
+            image = gdImageCreateFromPng(infile)
+        } else {
+            return nil
+        }
+
+        if let image = image {
+            self.size = Size(width: Int(image.pointee.sx), height: Int(image.pointee.sy))
+            self.gdImage = image
+        } else {
+            return nil
+        }
+    }
+    
     deinit {
         gdImageDestroy(gdImage)
     }
@@ -105,6 +128,21 @@ public class Gd {
             gdImageLine(gdImage, from.x, from.y, to.x, to.y, color)
         }
     }
+
+    // public func polygon(with points: [Point], color: Int32, mode: DrawingMode) {
+    //     let gdPoints = [gdPointPtr!]()
+    //     switch mode {
+    //     case .stroke:
+    //         gdImagePolygon(gdImage, gdPoints, points.count, color)
+    //     case .fill:
+    //         gdImageFilledPolygon(gdImage, gdPoints, points.count, color)
+    //     }
+    // }
+
+    // public func polyline(with points: [Point], color: Int32) {
+    //     let gdPoints = points
+    //     gdImageOpenPolygon(gdImage, gdPoints, points.count, color)
+    // }
     
     public func string(text: String, upperLeft: Point, color: Int32, font: GdRasterFont, up: Bool = false) {
         let cPtr = UnsafeMutablePointer<UInt8>(mutating: text)
@@ -129,9 +167,7 @@ public class Gd {
         }
     }
 
-    // TODO: string "up" function, replace (or add) true type functions?
-
-    // TODO: polygon functions
+    // TODO: true type functions?
 
     public func fill(with color: Int32, from: Point, borderedBy: Int32? = nil) {
         if let borderColor = borderedBy {
@@ -141,8 +177,8 @@ public class Gd {
         }
     }
     
-    // TODO: this is a little slapdash...
-    public func write(to filename: String) -> Int {
+    // TODO: this is less than robust...
+    @discardableResult public func write(to filename: String) -> Int {
         return Int(gdImageFile(gdImage, filename))
     }
     
