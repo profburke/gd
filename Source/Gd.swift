@@ -132,6 +132,10 @@ public class Gd {
     public func fill(with color: Int32, from: Point) {
         gdImageFill(gdImage, from.x, from.y, color)
     }
+
+    public func borderFill(with color: Int32, from: Point, to: Int32) {
+        gdImageFillToBorder(gdImage, from.x, from.y, to, color)
+    }
     
     // TODO: this is a little slapdash...
     public func write(to filename: String) -> Int {
