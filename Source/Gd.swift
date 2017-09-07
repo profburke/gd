@@ -49,6 +49,8 @@ public class Gd {
             image = gdImageCreateFromJpeg(infile)
         } else if filename.hasSuffix(".png") {
             image = gdImageCreateFromPng(infile)
+        } else if filename.hasSuffix(".gif") {
+            image = gdImageCreateFromGif(infile)
         } else {
             return nil
         }
@@ -129,15 +131,27 @@ public class Gd {
         }
     }
 
-    // public func polygon(with points: [Point], color: Int32, mode: DrawingMode) {
-    //     let gdPoints = [gdPointPtr!]()
-    //     switch mode {
-    //     case .stroke:
-    //         gdImagePolygon(gdImage, gdPoints, points.count, color)
-    //     case .fill:
-    //         gdImageFilledPolygon(gdImage, gdPoints, points.count, color)
-    //     }
-    // }
+    public func polygon(with points: [Point], color: Int32, mode: DrawingMode) {
+        let gdPoints = UnsafeMutablePointer<gdPoint>.allocate(capacity: points.count)
+        let stride = MemoryLayout<gdPoint>.stride
+        //gdPoints.initialize(to: 0, count: points.count)
+        defer {
+            //gdPoints.deinitialize(count: points.count)
+            gdPoints.deallocate(capacity: points.count)
+        }
+        var curPoint = gdPoints
+        for point in points {
+            curPoint.pointee.x = point.x
+            curPoint.pointee.y = point.y
+            curPoint = curPoint.advanced(by: stride)
+        }
+        switch mode {
+        case .stroke:
+            gdImagePolygon(gdImage, gdPoints, Int32(points.count), color)
+        case .fill:
+            gdImageFilledPolygon(gdImage, gdPoints, Int32(points.count), color)
+        }
+    }
 
     // public func polyline(with points: [Point], color: Int32) {
     //     let gdPoints = points
